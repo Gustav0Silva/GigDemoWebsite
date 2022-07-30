@@ -60,25 +60,29 @@ app.post('/update-profile', function (req, res) {
 app.get('/get-profile', function (req, res) {
 
   console.log("get-profile started");
-
-  let response = {};
-  // Connect to the db
-  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
-    if (err) throw err;
-
-    let db = client.db(databaseName);
-
-    let myquery = { userid: 1 };
-
-    db.collection("users").findOne(myquery, function (err, result) {
+  try{
+    let response = {};
+    // Connect to the db
+    MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
       if (err) throw err;
-      response = result;
-      client.close();
 
-      // Send response
-      res.send(response ? response : {});
+      let db = client.db(databaseName);
+
+      let myquery = { userid: 1 };
+
+      db.collection("users").findOne(myquery, function (err, result) {
+        if (err) throw err;
+        response = result;
+        client.close();
+
+        // Send response
+        res.send(response ? response : {});
+      });
     });
-  });
+  } catch (e) 
+  {
+    console.log  (e);
+  }
 });
 
 app.listen(3000, function () {
