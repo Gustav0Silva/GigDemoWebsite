@@ -60,6 +60,8 @@ app.post('/update-profile', function (req, res) {
 });
 
 app.get('/get-profile', function (req, res) {
+  console.log("start 3");
+
   try{
   let response = {};
   // Connect to the db
