@@ -40,7 +40,7 @@ let databaseName = "my-db";
 app.post('/update-profile', function (req, res) {
   let userObj = req.body;
 
-  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
@@ -65,7 +65,7 @@ app.get('/get-profile', function (req, res) {
   try{
   let response = {};
   // Connect to the db
-  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
