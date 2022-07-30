@@ -4,7 +4,7 @@ let fs = require('fs');
 let MongoClient = require('mongodb').MongoClient;
 let bodyParser = require('body-parser');
 let app = express();
-
+console.log("start 1");
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -20,14 +20,16 @@ app.get('/profile-picture', function (req, res) {
   res.end(img, 'binary');
 });
 
+console.log("start 2");
+
 // use when starting application locally with node command
-//let mongoUrlLocal = "mongodb://db_user:db_secure_password@localhost:27017";
+let mongoUrlLocal = "mongodb://admin:password@localhost:27017";
 
 // use when starting application as a separate docker container
-//let mongoUrlDocker = "mongodb://db_user:db_secure_password@host.docker.internal:27017";
+let mongoUrlDocker = "mongodb://admin:password@host.docker.internal:27017";
 
 // use when starting application as docker container, part of docker-compose
-let mongoUrlDockerCompose = "mongodb://db_user:db_secure_password@mongodb";
+let mongoUrlDockerCompose = "mongodb://admin:password@mongodb";
 
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -38,7 +40,7 @@ let databaseName = "my-db";
 app.post('/update-profile', function (req, res) {
   let userObj = req.body;
 
-  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
@@ -58,31 +60,30 @@ app.post('/update-profile', function (req, res) {
 });
 
 app.get('/get-profile', function (req, res) {
-
-  console.log("get-profile started");
   try{
-    let response = {};
-    // Connect to the db
-    MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
+  let response = {};
+  // Connect to the db
+  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+    if (err) throw err;
+
+    let db = client.db(databaseName);
+
+    let myquery = { userid: 1 };
+
+    db.collection("users").findOne(myquery, function (err, result) {
       if (err) throw err;
+      response = result;
+      client.close();
 
-      let db = client.db(databaseName);
-
-      let myquery = { userid: 1 };
-
-      db.collection("users").findOne(myquery, function (err, result) {
-        if (err) throw err;
-        response = result;
-        client.close();
-
-        // Send response
-        res.send(response ? response : {});
-      });
+      // Send response
+      res.send(response ? response : {});
     });
-  } catch (e) 
-  {
-    console.log  (e);
-  }
+  });
+}
+catch(err)
+{
+  console.log(err); 
+}
 });
 
 app.listen(3000, function () {
