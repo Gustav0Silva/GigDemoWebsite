@@ -24,10 +24,10 @@ app.get('/profile-picture', function (req, res) {
 //let mongoUrlLocal = "mongodb://db_user:db_secure_password@localhost:27017";
 
 // use when starting application as a separate docker container
-let mongoUrlDocker = "mongodb://db_user:db_secure_password@host.docker.internal:27017";
+//let mongoUrlDocker = "mongodb://db_user:db_secure_password@host.docker.internal:27017";
 
 // use when starting application as docker container, part of docker-compose
-//let mongoUrlDockerCompose = "mongodb://admin:password@mongodb";
+let mongoUrlDockerCompose = "mongodb://db_user:db_secure_password@mongodb";
 
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
@@ -38,7 +38,7 @@ let databaseName = "my-db";
 app.post('/update-profile', function (req, res) {
   let userObj = req.body;
 
-  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
@@ -63,7 +63,7 @@ app.get('/get-profile', function (req, res) {
 
   let response = {};
   // Connect to the db
-  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
