@@ -58,6 +58,9 @@ app.post('/update-profile', function (req, res) {
 });
 
 app.get('/get-profile', function (req, res) {
+
+  console.log("get-profile started");
+
   let response = {};
   // Connect to the db
   MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
