@@ -60,7 +60,7 @@ app.post('/update-profile', function (req, res) {
 app.get('/get-profile', function (req, res) {
   console.log("start 3");
 
-  try{
+  /*try{
   let response = {};
   // Connect to the db
   MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
@@ -83,7 +83,7 @@ app.get('/get-profile', function (req, res) {
 catch(err)
 {
   console.log(err); 
-}
+}*/
 });
 
 app.listen(3000, function () {
