@@ -42,7 +42,6 @@
     }
 </style>
 <script>
-    console.log("test" + window.location.host);
     var host = window.location.host;
     (async function init() {
         const response = await fetch('http://' + host + '/get-profile');
@@ -68,7 +67,7 @@
             interests: document.getElementById('input-interests').value
         };
         
-        const response = await fetch('http://${window.location.host}/update-profile', {
+        const response = await fetch('http://' + host + '/update-profile', {
             method: "POST",
             headers: {
               'Accept': 'application/json',
@@ -106,7 +105,7 @@
         <hr />
         <span>Email: </span><h3 id='email'>anna.smith@example.com</h3>
         <hr />
-        <span>Hobbies83: </span><h3 id='interests'>coding</h3>
+        <span>Hobbies84: </span><h3 id='interests'>coding</h3>
         <hr />
         <button class='button' onclick="updateProfile()">Edit Profile</button>
     </div>
