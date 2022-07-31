@@ -5,8 +5,6 @@ let MongoClient = require('mongodb').MongoClient;
 let bodyParser = require('body-parser');
 let app = express();
 
-console.log(MongoClient);
-
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -17,7 +15,6 @@ app.get('/', function (req, res) {
   });
 
 app.get('/profile-picture', function (req, res) {
-  console.log("GET /profile-picture start");
 
   let img = fs.readFileSync(path.join(__dirname, "images/profile-2.jpg"));
   res.writeHead(200, {'Content-Type': 'image/jpg' });
@@ -62,9 +59,10 @@ app.post('/update-profile', function (req, res) {
 });
 
 app.get('/get-profile', function (req, res) {
-  console.log("start 3");
+  console.log("start");
 
-  /*try{
+  try{
+    console.log("1" + mongoUrlLocal);
   let response = {};
   // Connect to the db
   MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
@@ -87,7 +85,60 @@ app.get('/get-profile', function (req, res) {
 catch(err)
 {
   console.log(err); 
-}*/
+}
+
+try{
+  console.log("2" + mongoUrlDocker)
+  let response = {};
+  // Connect to the db
+  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+    if (err) throw err;
+
+    let db = client.db(databaseName);
+
+    let myquery = { userid: 1 };
+
+    db.collection("users").findOne(myquery, function (err, result) {
+      if (err) throw err;
+      response = result;
+      client.close();
+
+      // Send response
+      res.send(response ? response : {});
+    });
+  });
+}
+catch(err)
+{
+  console.log(err); 
+}
+
+try{
+  console.log("3" + mongoUrlDockerCompose); 
+  let response = {};
+  // Connect to the db
+  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
+    if (err) throw err;
+
+    let db = client.db(databaseName);
+
+    let myquery = { userid: 1 };
+
+    db.collection("users").findOne(myquery, function (err, result) {
+      if (err) throw err;
+      response = result;
+      client.close();
+
+      // Send response
+      res.send(response ? response : {});
+    });
+  });
+}
+catch(err)
+{
+  console.log(err); 
+}
+
 });
 
 app.listen(3000, function () {
