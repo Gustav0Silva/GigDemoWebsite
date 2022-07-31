@@ -22,7 +22,7 @@ app.get('/profile-picture', function (req, res) {
 });
 
 // use when starting application locally with node command
-let mongoUrlLocal = "mongodb://db_user:db_secure_password@localhost:27017";
+let mongoUrlLocal = "mongodb://db_user:db_secure_password@127.0.0.1:27017";
 
 // use when starting application as a separate docker container
 let mongoUrlDocker = "mongodb://db_user:db_secure_password@host.docker.internal:27017";
@@ -59,10 +59,9 @@ app.post('/update-profile', function (req, res) {
 });
 
 app.get('/get-profile', function (req, res) {
-  console.log("start");
+  console.log("start 3");
 
   try{
-    console.log("1" + mongoUrlLocal);
   let response = {};
   // Connect to the db
   MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
@@ -86,59 +85,6 @@ catch(err)
 {
   console.log(err); 
 }
-
-try{
-  console.log("2" + mongoUrlDocker)
-  let response = {};
-  // Connect to the db
-  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
-    if (err) throw err;
-
-    let db = client.db(databaseName);
-
-    let myquery = { userid: 1 };
-
-    db.collection("users").findOne(myquery, function (err, result) {
-      if (err) throw err;
-      response = result;
-      client.close();
-
-      // Send response
-      res.send(response ? response : {});
-    });
-  });
-}
-catch(err)
-{
-  console.log(err); 
-}
-
-try{
-  console.log("3" + mongoUrlDockerCompose); 
-  let response = {};
-  // Connect to the db
-  MongoClient.connect(mongoUrlDockerCompose, mongoClientOptions, function (err, client) {
-    if (err) throw err;
-
-    let db = client.db(databaseName);
-
-    let myquery = { userid: 1 };
-
-    db.collection("users").findOne(myquery, function (err, result) {
-      if (err) throw err;
-      response = result;
-      client.close();
-
-      // Send response
-      res.send(response ? response : {});
-    });
-  });
-}
-catch(err)
-{
-  console.log(err); 
-}
-
 });
 
 app.listen(3000, function () {
