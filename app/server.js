@@ -4,7 +4,7 @@ let fs = require('fs');
 let MongoClient = require('mongodb').MongoClient;
 let bodyParser = require('body-parser');
 let app = express();
-console.log("start 1");
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -19,8 +19,6 @@ app.get('/profile-picture', function (req, res) {
   res.writeHead(200, {'Content-Type': 'image/jpg' });
   res.end(img, 'binary');
 });
-
-console.log("start 2");
 
 // use when starting application locally with node command
 let mongoUrlLocal = "mongodb://db_user:db_secure_password@localhost:27017";
@@ -40,7 +38,7 @@ let databaseName = "my-db";
 app.post('/update-profile', function (req, res) {
   let userObj = req.body;
 
-  MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
@@ -65,7 +63,7 @@ app.get('/get-profile', function (req, res) {
   try{
   let response = {};
   // Connect to the db
-  MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
