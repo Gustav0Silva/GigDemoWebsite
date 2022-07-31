@@ -30,6 +30,8 @@ let mongoUrlDocker = "mongodb://db_user:db_secure_password@host.docker.internal:
 // use when starting application as docker container, part of docker-compose
 let mongoUrlDockerCompose = "mongodb://db_user:db_secure_password@mongodb";
 
+let mongoUrlK8s = `mongodb://${process.env.USER_NAME}:${process.env.USER_PWD}@${process.env.DB_URL}`
+
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
@@ -39,7 +41,7 @@ let databaseName = "my-db";
 app.post('/update-profile', function (req, res) {
   let userObj = req.body;
 
-  MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlK8s, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
@@ -64,7 +66,7 @@ app.get('/get-profile', function (req, res) {
   try{
   let response = {};
   // Connect to the db
-  MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlK8s, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
