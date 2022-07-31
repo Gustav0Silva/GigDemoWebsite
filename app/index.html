@@ -42,8 +42,10 @@
     }
 </style>
 <script>
+    console.log("test" + window.location.host);
+    var host = window.location.host;
     (async function init() {
-        const response = await fetch('http://${window.location.host}/get-profile');
+        const response = await fetch('http://' + host + '/get-profile');
         console.log("response", response);
         const user = await response.json();
         console.log(JSON.stringify(user));
@@ -104,7 +106,7 @@
         <hr />
         <span>Email: </span><h3 id='email'>anna.smith@example.com</h3>
         <hr />
-        <span>Hobbies77: </span><h3 id='interests'>coding</h3>
+        <span>Hobbies83: </span><h3 id='interests'>coding</h3>
         <hr />
         <button class='button' onclick="updateProfile()">Edit Profile</button>
     </div>
